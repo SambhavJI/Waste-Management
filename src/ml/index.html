@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teachable Machine Test</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h2>Teachable Machine Model Test</h2>
+
+    <!-- File Upload -->
+    <input type="file" id="upload" accept="image/*" />
+
+    <!-- Image Preview -->
+    <img id="preview" width="300" />
+
+    <!-- Prediction Results -->
+    <h3>Prediction:</h3>
+    <pre id="result"></pre>
+  </div>
+
+  <!-- TensorFlow + Teachable Machine -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+
+  <!-- Your Code -->
+  <script src="script.js"></script>
+</body>
+</html>
