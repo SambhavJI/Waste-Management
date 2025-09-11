@@ -3,15 +3,18 @@ const connectDB = require("./config/database");
 const cookieParser = require("cookie-parser");
 const app = express();
 const authRouter = require("./routes/authRouter.js");
-const userAuth = require("./middlewares/auth");
-const path = require("path");
+const uploadRouter = require("./routes/uploadRouter.js");
+const imageRouter = require("./routes/imageRouter.js");
+const cors = require("cors");
 
 app.use(express.json());
 app.use(cookieParser());
-
+app.use(cors());
 app.use("/", authRouter);
 
-app.use("/ml", express.static(path.join(__dirname, "ml")));
+app.use("/",imageRouter)
+
+app.use("/",uploadRouter);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
