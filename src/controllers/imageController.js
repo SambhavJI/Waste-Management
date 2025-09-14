@@ -40,7 +40,6 @@ const imageClassify = async (req, res) => {
   try {
     let { pred } = req.body;
 
-    // Normalize prediction (remove spaces + lowercase)
     const key = pred.trim().toLowerCase();
 
     const info = classInfo[key];
@@ -49,7 +48,7 @@ const imageClassify = async (req, res) => {
     }
 
     res.json({
-      pred: pred.trim(), // return original cleaned name
+      pred: pred.trim(),
       ...info
     });
   } catch (err) {

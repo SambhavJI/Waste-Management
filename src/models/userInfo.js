@@ -17,6 +17,9 @@ const userInfoSchema = new mongoose.Schema(
     image: {
       type: String,
       required: true,
+    }, status: {
+      default: "pending",
+      type: String
     },
   },
   { timestamps: true }

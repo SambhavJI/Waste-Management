@@ -6,6 +6,7 @@ const authRouter = require("./routes/authRouter.js");
 const uploadRouter = require("./routes/uploadRouter.js");
 const imageRouter = require("./routes/imageRouter.js");
 const cors = require("cors");
+const adminRouter = require("./routes/adminRouter.js");
 
 app.use(express.json());
 app.use(cookieParser());
@@ -18,6 +19,8 @@ app.use("/", authRouter);
 app.use("/",imageRouter)
 
 app.use("/",uploadRouter);
+
+app.use("/admin",adminRouter);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

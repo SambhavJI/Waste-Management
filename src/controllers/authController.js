@@ -3,12 +3,12 @@ const User = require("../models/user.js");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const validator = require("validator");
+const sendMail = require("../utils/mail.js");
 
 const signup = async (req, res) => {
     try {
         const { name, email, password } = req.body;
 
-        // Validate required fields
         if (!name || !email || !password) {
             return res.status(400).json({ error: "All fields are required" });
         }
@@ -30,6 +30,28 @@ const signup = async (req, res) => {
         });
 
         await user.save();
+        const to = user.email;
+        const subject = "Welcome to Smart Waste Manager ♻️";
+        const text = `Hi ${user.name},
+
+Welcome to RECYCLIFY The Smart Waste Manager — we’re excited to have you join us in making waste management smarter and greener! 🌍
+
+With our platform, you can:
+✅ Identify waste instantly using AI image classification  
+♻️ Learn whether it’s recyclable, compostable, or hazardous  
+💡 Get smart disposal tips to reduce environmental impact  
+📊 Track your contributions towards a cleaner planet  
+
+Together, we can reduce waste, recycle more, and protect our environment. 🌱
+
+If you have any questions or feedback, just reply to this email — we’re here to help!
+
+Cheers,  
+The RECYCLIFY Team
+`;
+
+        await sendMail(to, subject, text);
+
         res.status(201).json({ message: "User successfully created" });
 
     } catch (err) {
