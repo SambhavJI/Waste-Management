@@ -1,3 +1,5 @@
+const sendMail = require("../utils/mail");
+
 const UserInfo = require("../models/userInfo");
 
 const getAllRequests = async (req, res) => {

@@ -86,7 +86,6 @@ const login = async (req, res) => {
         });
 
         res.cookie("token", token, {
-            httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
             maxAge: 24 * 60 * 60 * 1000 // 1 day
@@ -106,5 +105,10 @@ const login = async (req, res) => {
         res.status(400).json({ error: err.message });
     }
 }
+const logout=async (req,res)=>{
+    res.cookie("token",null , {
+        expires:new Date(Date.now())
+    }).send("Logout succesfull")
+}
 
-module.exports = { signup, login };
+module.exports = { signup, login,logout };
