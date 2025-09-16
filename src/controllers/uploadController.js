@@ -39,7 +39,7 @@ Thank you for doing your part in making waste management smarter and greener. ğŸ
 Best regards,  
 The RECYCLIFY Team  
 `;
-        // await sendMail(to, subject, text);
+        await sendMail(to, subject, text);
         res.status(201).json({ message: "Info uploaded successfully" })
     } catch (err) {
         res.status(400).json({ error: err.message })
