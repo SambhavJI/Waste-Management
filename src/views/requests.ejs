@@ -143,7 +143,7 @@
 
   <script>
     async function updateStatus(reqid, status) {
-      const res = await fetch("http://localhost:3000/admin/update", {
+      const res = await fetch("https://waste-management-production-a942.up.railway.app/admin/update", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ reqid, status })
