@@ -87,11 +87,13 @@ const login = async (req, res) => {
 
         res.cookie("token", token, {
             httpOnly: true,
-            secure: false,
-            sameSite: "lax",
-            path:"/",
-            maxAge: 24 * 60 * 60 * 1000 // 1 day
+            secure: false,   // true in production
+            sameSite: "none",
+            path: "/",
+
+            maxAge: 24 * 60 * 60 * 1000
         });
+
 
         res.status(200).json({
             message: "Login successful",
@@ -107,10 +109,10 @@ const login = async (req, res) => {
         res.status(400).json({ error: err.message });
     }
 }
-const logout=async (req,res)=>{
-    res.cookie("token",null , {
-        expires:new Date(Date.now())
+const logout = async (req, res) => {
+    res.cookie("token", null, {
+        expires: new Date(Date.now())
     }).send("Logout succesfull")
 }
 
-module.exports = { signup, login,logout };
+module.exports = { signup, login, logout };
