@@ -3,6 +3,10 @@ const User = require("../models/user");
 require("dotenv").config();
 
 const userAuth = async (req, res, next) => {
+    if (req.method === 'OPTIONS') {
+        return next();
+    }
+
     try {
         const token = req.cookies.token;
 
@@ -28,7 +32,6 @@ const userAuth = async (req, res, next) => {
             });
         }
 
-        // Attach user to request object
         req.user = user;
         next();
     } catch (err) {
@@ -38,4 +41,4 @@ const userAuth = async (req, res, next) => {
     }
 };
 
-module.exports = userAuth 
+module.exports = userAuth;
