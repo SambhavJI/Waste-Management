@@ -9,12 +9,17 @@ const cors = require("cors");
 const path = require("path");
 const adminRouter = require("./routes/adminRouter.js");
 
-app.use(express.json());
+app.use(
+  cors({
+    origin: "https://waste-management-frontend-topaz.vercel.app",
+    credentials: true,
+  })
+);
+
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors({
-  origin: "https://waste-management-frontend-topaz.vercel.app",
-  credentials: true,               
-}));
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 console.log("Views directory:", path.join(__dirname, "views"));

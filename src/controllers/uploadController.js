@@ -11,6 +11,9 @@ const uploadInfo = async (req, res) => {
         if (!latitude || !longitude || !image) {
             throw new Error("Please provide all the details")
         }
+        console.log("Upload request body:", req.body);
+console.log("Authenticated user:", req.user);
+
         const userInfo = new userInfoSchema({
             userEmail: user.email,
             latitude,
