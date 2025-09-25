@@ -11,7 +11,7 @@ const adminRouter = require("./routes/adminRouter.js");
 
 app.use(
   cors({
-    origin: "https://waste-management-frontend-topaz.vercel.app",
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
