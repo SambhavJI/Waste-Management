@@ -31,7 +31,7 @@ const signup = async (req, res) => {
             password: hashedPassword,
         });
         await user.save();
-        
+
         const subject = "Welcome to Smart Waste Manager ♻️";
         const html = `
       <p>Hi <strong>${user.name}</strong>,</p>
@@ -58,7 +58,7 @@ const signup = async (req, res) => {
             html,
         });
 
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+        const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
             expiresIn: "7d",
         });
         res.cookie("token", token, {
