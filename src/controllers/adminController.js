@@ -40,7 +40,7 @@ const check = async (req, res) => {
 
     try {
       await sendMail({
-            to: updated.email,
+            to: updated.userEmail,
             subject,
             message,
         });
