@@ -1,23 +1,22 @@
-const nodemailer = require("nodemailer");
-require("dotenv").config();
+const { Resend } = require('resend');
+require('dotenv').config();
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS, 
-  },
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-const sendMail = async (toUser, subject, text) => {
-  const mailOption = {
-    from: `"Recyclify" <${process.env.GMAIL_USER}>`,
-    to: toUser,
-    subject: subject,
-    text: text,
-  };
-
-  await transporter.sendMail(mailOption);
-};
+async function sendMail({ to, subject, html }) {
+  try {
+    const response = await resend.emails.send({
+      from: 'Recyclify<onboarding@resend.dev>',
+      to,
+      subject,
+      html,
+    });
+    console.log('✅ Email sent:', response);
+    return response;
+  } catch (error) {
+    console.error('❌ Email sending failed:', error);
+    throw error;
+  }
+}
 
 module.exports = sendMail;

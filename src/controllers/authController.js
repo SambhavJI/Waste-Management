@@ -9,55 +9,78 @@ const signup = async (req, res) => {
     try {
         const { name, email, password } = req.body;
 
+        // Basic validation
         if (!name || !email || !password) {
             return res.status(400).json({ error: "All fields are required" });
         }
 
-        // Check if user exists
-        const isUser = await User.findOne({ email });
-        if (isUser) {
+        if (!validator.isEmail(email)) {
+            return res.status(400).json({ error: "Invalid email address" });
+        }
+
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
             return res.status(409).json({ error: "User already exists" });
         }
 
-        // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create new user
         const user = new User({
             name,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+        });
+        await user.save();
+        
+        const subject = "Welcome to Smart Waste Manager ♻️";
+        const html = `
+      <p>Hi <strong>${user.name}</strong>,</p>
+      <p>Welcome to <b>RECYCLIFY — The Smart Waste Manager</b> 🌍 We're thrilled to have you!</p>
+
+      <p>With our platform, you can:</p>
+      <ul>
+        <li>✅ Identify waste instantly using AI image classification</li>
+        <li>♻️ Learn whether it’s recyclable, compostable, or hazardous</li>
+        <li>💡 Get smart disposal tips to reduce environmental impact</li>
+        <li>📊 Track your contributions towards a cleaner planet</li>
+      </ul>
+
+      <p>Together, we can reduce waste, recycle more, and protect our environment. 🌱</p>
+      <p>If you have any questions, just reply to this email — we’re here to help!</p>
+
+      <p>Cheers,<br>
+      <strong>The RECYCLIFY Team</strong></p>
+    `;
+
+        await sendMail({
+            to: user.email,
+            subject,
+            html,
         });
 
-        await user.save();
-        const to = user.email;
-        const subject = "Welcome to Smart Waste Manager ♻️";
-        const text = `Hi ${user.name},
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+            expiresIn: "7d",
+        });
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,   
+            sameSite: "none",
 
-Welcome to RECYCLIFY The Smart Waste Manager — we’re excited to have you join us in making waste management smarter and greener! 🌍
+            maxAge: 24 * 60 * 60 * 1000
+        });
 
-With our platform, you can:
-✅ Identify waste instantly using AI image classification  
-♻️ Learn whether it’s recyclable, compostable, or hazardous  
-💡 Get smart disposal tips to reduce environmental impact  
-📊 Track your contributions towards a cleaner planet  
 
-Together, we can reduce waste, recycle more, and protect our environment. 🌱
-
-If you have any questions or feedback, just reply to this email — we’re here to help!
-
-Cheers,  
-The RECYCLIFY Team
-`;
-
-        await sendMail(to, subject, text);
-
-        res.status(201).json({ message: "User successfully created" });
-
-    } catch (err) {
-        res.status(400).json({ error: err.message });
+        res.status(201).json({
+            message: "Signup successful! Welcome email sent.",
+            token,
+            user: { name: user.name, email: user.email },
+        });
+    } catch (error) {
+        console.error("Signup Error:", error);
+        res.status(500).json({ error: "Server error. Please try again later." });
     }
-}
+};
+
 
 const login = async (req, res) => {
     try {
