@@ -39,7 +39,11 @@ const check = async (req, res) => {
         : `Hello ,\n\nWe regret to inform you that your recycle request has been rejected.\n\nIf you think this was a mistake, please contact our support team.`;
 
     try {
-      await sendMail(updated.userEmail, subject, message);
+      await sendMail({
+            to: updated.email,
+            subject,
+            message,
+        });
     } catch (mailErr) {
       console.error("Error sending mail:", mailErr);
     }
