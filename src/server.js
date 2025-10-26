@@ -20,6 +20,11 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.get('/ping', (req, res) => {
+  res.status(200).json({ message: 'pong 🏓', status: 'alive' });
+});
+
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 console.log("Views directory:", path.join(__dirname, "views"));
