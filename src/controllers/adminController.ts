@@ -1,19 +1,20 @@
-const sendMail = require("../utils/mail");
-const UserInfo = require("../models/userInfo");
+import sendMail from "../utils/mail.js";
+import UserInfo from "../models/userInfo.js";
+import{type Request, type Response } from "express";
 
-const getAllRequests = async (req, res) => {
+const getAllRequests = async (req : Request, res : Response) : Promise<void> => {
   try {
     const requests = await UserInfo.find({ status: "pending" })
       .sort({ createdAt: -1 })
       .select("name userEmail latitude longitude image status");
 
     res.render("requests", { requests });
-  } catch (err) {
+  } catch (err : any) {
     res.status(500).json({ error: err.message });
   }
 };
 
-const check = async (req, res) => {
+const check = async (req : Request, res : Response) => {
   try {
     const { status, reqid } = req.body;
 
@@ -33,7 +34,7 @@ const check = async (req, res) => {
         ? "Your recycle request has been accepted ✅"
         : "Your recycle request has been rejected ❌";
 
-    const message =
+    const message : any =
       newStatus === "accepted"
         ? `Hello,\n\nGood news! Your recycle request has been accepted. We will process it shortly.\n\nThank you for contributing to a cleaner planet 🌍.`
         : `Hello ,\n\nWe regret to inform you that your recycle request has been rejected.\n\nIf you think this was a mistake, please contact our support team.`;
@@ -42,17 +43,17 @@ const check = async (req, res) => {
       await sendMail({
             to: updated.userEmail,
             subject,
-            message,
+            html: message,
         });
-    } catch (mailErr) {
+    } catch (mailErr : any) {
       console.error("Error sending mail:", mailErr);
     }
 
     res.status(200).json(updated);
-  } catch (err) {
+  } catch (err : any) {
     console.error(err);
     res.status(500).json({ error: err.message });
   }
 };
 
-module.exports = { getAllRequests, check };
+export { getAllRequests, check };

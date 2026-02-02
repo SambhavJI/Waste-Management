@@ -25,4 +25,4 @@ const userInfoSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("UserInfo", userInfoSchema);
+export default mongoose.model("UserInfo", userInfoSchema);

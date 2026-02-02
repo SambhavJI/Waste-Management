@@ -1,11 +1,13 @@
-const bcrypt = require("bcrypt");
-const User = require("../models/user.js");
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
-const validator = require("validator");
-const sendMail = require("../utils/mail.js");
+import bcrypt from "bcrypt";
+import User from "../models/user.js";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
+import { type Request, type Response } from "express";
+import validator from "validator";
+import sendMail from "../utils/mail.js";
 
-const signup = async (req, res) => {
+const signup = async (req : Request, res : Response) => {
     try {
         const { name, email, password } = req.body;
 
@@ -58,7 +60,7 @@ const signup = async (req, res) => {
             html,
         });
 
-        const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
+        const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY as string, {
             expiresIn: "7d",
         });
         res.cookie("token", token, {
@@ -82,7 +84,7 @@ const signup = async (req, res) => {
 };
 
 
-const login = async (req, res) => {
+const login = async (req : Request, res : Response) => {
     try {
         const { email, password } = req.body;
 
@@ -104,7 +106,7 @@ const login = async (req, res) => {
             return res.status(401).json({ error: "Invalid credentials" });
         }
 
-        const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY, {
+        const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY as string, {
             expiresIn: "1d",
         });
 
@@ -127,11 +129,11 @@ const login = async (req, res) => {
             }
         });
 
-    } catch (err) {
+    } catch (err : any) {
         res.status(400).json({ error: err.message });
     }
 }
-const logout = async (req, res) => {
+const logout = async (req : Request, res : Response ) => {
     res.cookie("token", null, {
         httpOnly: true,
         secure: true,

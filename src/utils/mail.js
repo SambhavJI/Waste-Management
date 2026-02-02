@@ -19,4 +19,4 @@ async function sendMail({ to, subject, html }) {
   }
 }
 
-module.exports = sendMail;
+export default sendMail;
